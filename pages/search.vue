@@ -14,12 +14,20 @@
             </div>
 
             <div v-else-if="animes.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <div v-for="anime in animes" :key="anime.id" class="relative rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
-                    <img :src="anime.imageUrl" alt="Anime Image" class="w-full h-full object-cover" />
+                <router-link v-for="anime in animes" :key="anime.id" :to="`/anime?q=${anime.generic_path}`" class="relative rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
+                    <img :src="anime.imageUrl || 'fallback_image_url.jpg'" alt="Anime Image" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 transition-opacity duration-300 opacity-100 md:opacity-0 hover:opacity-100 p-4">
                         <p class="text-white text-center font-semibold">{{ anime.title }} - {{ anime.year }}</p>
                     </div>
-                </div>
+                </router-link>
+            </div>
+
+            <div v-else-if="errorMessage" class="text-center text-red-500 mt-4">
+                <p>{{ errorMessage }}</p>
+            </div>
+
+            <div v-else-if="animes.length === 0 && !isLoading" class="text-center mt-4">
+                <p>No results found</p>
             </div>
         </div>
     </UContainer>
@@ -31,15 +39,17 @@ import { ref } from 'vue';
 const animes = ref([]);
 const searchQuery = ref('');
 const isLoading = ref(false);
+const errorMessage = ref('');
 
 const search = async () => {
     if (!searchQuery.value.trim()) return;
 
     isLoading.value = true;
-    animes.value = []; 
+    animes.value = [];
+    errorMessage.value = '';
 
     try {
-        const response = await fetch(`http://localhost:2000/search?q=${searchQuery.value}`);
+        const response = await fetch(`http://localhost:2000/search?q=${encodeURIComponent(searchQuery.value)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -47,6 +57,7 @@ const search = async () => {
         animes.value = data;
     } catch (error) {
         console.error('Error fetching anime data:', error);
+        errorMessage.value = 'Failed to fetch data. Please try again.';
     } finally {
         isLoading.value = false;
     }
