@@ -42,7 +42,9 @@ const router = useRouter();
 
 const fetchEpisodes = async () => {
     try {
-        const response = await fetch('http://localhost:2000/releases');
+        //const response = await fetch('http://localhost:2000/releases');
+        const response = await fetch('https://simonapi.squareweb.app/releases');
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -54,7 +56,6 @@ const fetchEpisodes = async () => {
 };
 
 const goToPlayer = (episode) => {
-    console.log('Episode clicked:', episode);
     const slug = episode.episode.anime.slug_serie;
     const ep = episode.episode.n_episodio;
     router.push(`/player/${slug}/${ep}`);

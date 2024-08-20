@@ -46,7 +46,9 @@ export default {
 
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:2000/anime?q=${encodeURIComponent(path.value)}`);
+        //const response = await fetch(`http://localhost:2000/anime?q=${encodeURIComponent(path.value)}`);
+        const response = await fetch(`https://simonapi.squareweb.app/anime?q=${encodeURIComponent(path.value)}`);
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

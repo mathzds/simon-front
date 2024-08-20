@@ -56,7 +56,9 @@ const search = async () => {
     errorMessage.value = '';
 
     try {
-        const response = await fetch(`http://localhost:2000/search?q=${encodeURIComponent(searchQuery.value)}`);
+        //const response = await fetch(`http://localhost:2000/search?q=${encodeURIComponent(searchQuery.value)}`);
+
+        const response = await fetch(`https://simonapi.squareweb.app/search?q=${encodeURIComponent(searchQuery.value)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

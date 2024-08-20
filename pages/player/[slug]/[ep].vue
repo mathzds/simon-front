@@ -21,7 +21,8 @@ export default {
   },
   mounted() {
     const video = this.$refs.video;
-    const videoSrc = `http://localhost:2000/episode/${this.slug}/${this.ep}`;
+    //const videoSrc = `http://localhost:2000/episode/${this.slug}/${this.ep}`;
+    const videoSrc = `https://simonapi.squareweb.app/episode/${this.slug}/${this.ep}`;
 
     try {
       if (Hls.isSupported()) {
